@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Kalender Ulang Tahun Pegawai</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+    }
+    .month {
+      margin: 40px 0;
+    }
+    .calendar {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 5px;
+      max-width: 800px;
+      margin: 10px auto;
+    }
+    .day, .header {
+      background: white;
+      border: 1px solid #ccc;
+      padding: 8px;
+      min-height: 60px;
+      position: relative;
+    }
+    .header {
+      background: #2196f3;
+      color: white;
+      text-align: center;
+      font-weight: bold;
+    }
+    .day span {
+      font-weight: bold;
+    }
+    .birthday {
+      background: #ffeb3b;
+      padding: 2px 4px;
+      margin-top: 5px;
+      display: block;
+      border-radius: 3px;
+      font-size: 0.8em;
+    }
+  </style>
+</head>
+<body>
+  <h1>Kalender Ulang Tahun Pegawai - 2025</h1>
+  <div id="calendar-container"></div>
+
+  <script>
+    async function loadBirthdays() {
+      const response = await fetch("ulangtahun.csv");
+      const text = await response.text();
+      const lines = text.trim().split("\n").slice(1); // buang header
+      const birthdays = {};
+
+      lines.forEach(line => {
+        const [nama, tanggal] = line.split(",");
+        const date = new Date(tanggal.trim());
+        const key = date.getMonth() + 1 + "-" + date.getDate();
+        if (!birthdays[key]) birthdays[key] = [];
+        birthdays[key].push(nama.trim());
+      });
+      return birthdays;
+    }
+
+    function createCalendar(year, birthdays) {
+      const container = document.getElementById("calendar-container");
+      const monthNames = [
+        "Januari","Februari","Maret","April","Mei","Juni",
+        "Juli","Agustus","September","Oktober","November","Desember"
+      ];
+      const dayNames = ["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"];
+
+      for (let month = 0; month < 12; month++) {
+        const monthDiv = document.createElement("div");
+        monthDiv.className = "month";
+
+        const title = document.createElement("h2");
+        title.textContent = monthNames[month] + " " + year;
+        title.style.textAlign = "center";
+        monthDiv.appendChild(title);
+
+        const calendar = document.createElement("div");
+        calendar.className = "calendar";
+
+        // Header Hari
+        for (let d = 0; d < 7; d++) {
+          const header = document.createElement("div");
+          header.className = "header";
+          header.textContent = dayNames[d];
+          calendar.appendChild(header);
+        }
+
+        // Hitung jumlah hari dalam bulan
+        const firstDay = new Date(year, month, 1).getDay();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+        // Kosong sebelum tanggal 1
+        for (let i = 0; i < firstDay; i++) {
+          calendar.appendChild(document.createElement("div"));
+        }
+
+        // Isi hari
+        for (let day = 1; day <= daysInMonth; day++) {
+          const cell = document.createElement("div");
+          cell.className = "day";
+          const span = document.createElement("span");
+          span.textContent = day;
+          cell.appendChild(span);
+
+          const key = (month + 1) + "-" + day;
+          if (birthdays[key]) {
+            birthdays[key].forEach(nama => {
+              const b = document.createElement("div");
+              b.className = "birthday";
+              b.textContent = nama;
+              cell.appendChild(b);
+            });
+          }
+
+          calendar.appendChild(cell);
+        }
+
+        monthDiv.appendChild(calendar);
+        container.appendChild(monthDiv);
+      }
+    }
+
+    loadBirthdays().then(birthdays => {
+      createCalendar(2025, birthdays);
+    });
+  </script>
+</body>
+</html>
