@@ -9,18 +9,15 @@
       background: #f5f5f5;
       padding: 20px;
     }
-    h1 {
+    h1, h2 {
       text-align: center;
-    }
-    .month {
-      margin: 40px 0;
     }
     .calendar {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
       gap: 5px;
       max-width: 800px;
-      margin: 10px auto;
+      margin: 20px auto;
     }
     .day, .header {
       background: white;
@@ -46,95 +43,126 @@
       border-radius: 3px;
       font-size: 0.8em;
     }
+    .nav-buttons {
+      text-align: center;
+      margin: 20px 0;
+    }
+    .nav-buttons button {
+      background: #2196f3;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin: 0 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1em;
+    }
+    .nav-buttons button:hover {
+      background: #1976d2;
+    }
   </style>
 </head>
 <body>
-  <h1>Kalender Ulang Tahun Pegawai - 2025</h1>
-  <div id="calendar-container"></div>
+  <h1>Kalender Ulang Tahun Pegawai</h1>
+  <div class="nav-buttons">
+    <button id="prevBtn">⟨ Previous</button>
+    <button id="nextBtn">Next ⟩</button>
+  </div>
+  <h2 id="month-title"></h2>
+  <div id="calendar-container" class="calendar"></div>
 
   <script>
+    let currentYear = 2025;
+    let currentMonth = new Date().getMonth(); // mulai dari bulan sekarang
+    let birthdays = {};
+
     async function loadBirthdays() {
-      const response = await fetch("ulangtahun.csv");
+      const response = await fetch("./ulangtahun.csv");
       const text = await response.text();
       const lines = text.trim().split("\n").slice(1); // buang header
-      const birthdays = {};
+      const data = {};
 
       lines.forEach(line => {
         const [nama, tanggal] = line.split(",");
         const date = new Date(tanggal.trim());
-        const key = date.getMonth() + 1 + "-" + date.getDate();
-        if (!birthdays[key]) birthdays[key] = [];
-        birthdays[key].push(nama.trim());
+        const key = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+        if (!data[key]) data[key] = [];
+        data[key].push(nama.trim());
       });
-      return birthdays;
+      birthdays = data;
+      renderCalendar(currentYear, currentMonth);
     }
 
-    function createCalendar(year, birthdays) {
+    function renderCalendar(year, month) {
       const container = document.getElementById("calendar-container");
+      const title = document.getElementById("month-title");
+      container.innerHTML = "";
+
       const monthNames = [
         "Januari","Februari","Maret","April","Mei","Juni",
         "Juli","Agustus","September","Oktober","November","Desember"
       ];
       const dayNames = ["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"];
 
-      for (let month = 0; month < 12; month++) {
-        const monthDiv = document.createElement("div");
-        monthDiv.className = "month";
+      title.textContent = monthNames[month] + " " + year;
 
-        const title = document.createElement("h2");
-        title.textContent = monthNames[month] + " " + year;
-        title.style.textAlign = "center";
-        monthDiv.appendChild(title);
+      // Header hari
+      for (let d = 0; d < 7; d++) {
+        const header = document.createElement("div");
+        header.className = "header";
+        header.textContent = dayNames[d];
+        container.appendChild(header);
+      }
 
-        const calendar = document.createElement("div");
-        calendar.className = "calendar";
+      const firstDay = new Date(year, month, 1).getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-        // Header Hari
-        for (let d = 0; d < 7; d++) {
-          const header = document.createElement("div");
-          header.className = "header";
-          header.textContent = dayNames[d];
-          calendar.appendChild(header);
+      // Kosong sebelum tanggal 1
+      for (let i = 0; i < firstDay; i++) {
+        container.appendChild(document.createElement("div"));
+      }
+
+      // Isi hari
+      for (let day = 1; day <= daysInMonth; day++) {
+        const cell = document.createElement("div");
+        cell.className = "day";
+        const span = document.createElement("span");
+        span.textContent = day;
+        cell.appendChild(span);
+
+        const key = year + "-" + (month + 1) + "-" + day;
+        if (birthdays[key]) {
+          birthdays[key].forEach(nama => {
+            const b = document.createElement("div");
+            b.className = "birthday";
+            b.textContent = nama;
+            cell.appendChild(b);
+          });
         }
-
-        // Hitung jumlah hari dalam bulan
-        const firstDay = new Date(year, month, 1).getDay();
-        const daysInMonth = new Date(year, month + 1, 0).getDate();
-
-        // Kosong sebelum tanggal 1
-        for (let i = 0; i < firstDay; i++) {
-          calendar.appendChild(document.createElement("div"));
-        }
-
-        // Isi hari
-        for (let day = 1; day <= daysInMonth; day++) {
-          const cell = document.createElement("div");
-          cell.className = "day";
-          const span = document.createElement("span");
-          span.textContent = day;
-          cell.appendChild(span);
-
-          const key = (month + 1) + "-" + day;
-          if (birthdays[key]) {
-            birthdays[key].forEach(nama => {
-              const b = document.createElement("div");
-              b.className = "birthday";
-              b.textContent = nama;
-              cell.appendChild(b);
-            });
-          }
-
-          calendar.appendChild(cell);
-        }
-
-        monthDiv.appendChild(calendar);
-        container.appendChild(monthDiv);
+        container.appendChild(cell);
       }
     }
 
-    loadBirthdays().then(birthdays => {
-      createCalendar(2025, birthdays);
+    // Navigasi
+    document.getElementById("prevBtn").addEventListener("click", () => {
+      currentMonth--;
+      if (currentMonth < 0) {
+        currentMonth = 11;
+        currentYear--;
+      }
+      renderCalendar(currentYear, currentMonth);
     });
+
+    document.getElementById("nextBtn").addEventListener("click", () => {
+      currentMonth++;
+      if (currentMonth > 11) {
+        currentMonth = 0;
+        currentYear++;
+      }
+      renderCalendar(currentYear, currentMonth);
+    });
+
+    loadBirthdays();
   </script>
 </body>
 </html>
