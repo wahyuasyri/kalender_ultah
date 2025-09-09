@@ -64,6 +64,11 @@
     .weekend {
       background: #ffe5e5; /* merah soft */
     }
+    /* Highlight hari ini */
+    .today {
+      background: #d4f8d4 !important;
+      border: 2px solid #4caf50;
+    }
   </style>
 </head>
 <body>
@@ -76,7 +81,7 @@
   <div id="calendar-container" class="calendar"></div>
 
   <script>
-    let currentYear = 2025;
+    let currentYear = new Date().getFullYear();
     let currentMonth = new Date().getMonth(); // mulai dari bulan sekarang
     let birthdays = {};
 
@@ -88,11 +93,12 @@
 
       lines.forEach(line => {
         const [nama, tanggal] = line.split(",");
-        const date = new Date(tanggal.trim());
-        const key = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+        const [day, month] = tanggal.trim().split("/").map(Number); // format dd/mm
+        const key = month + "-" + day; // hanya simpan bulan-hari
         if (!data[key]) data[key] = [];
         data[key].push(nama.trim());
       });
+
       birthdays = data;
       renderCalendar(currentYear, currentMonth);
     }
@@ -121,6 +127,8 @@
       const firstDay = new Date(year, month, 1).getDay();
       const daysInMonth = new Date(year, month + 1, 0).getDate();
 
+      const today = new Date();
+
       // Kosong sebelum tanggal 1
       for (let i = 0; i < firstDay; i++) {
         container.appendChild(document.createElement("div"));
@@ -139,11 +147,21 @@
           cell.classList.add("weekend");
         }
 
+        // Tambah highlight hari ini
+        if (
+          day === today.getDate() &&
+          month === today.getMonth() &&
+          year === today.getFullYear()
+        ) {
+          cell.classList.add("today");
+        }
+
         const span = document.createElement("span");
         span.textContent = day;
         cell.appendChild(span);
 
-        const key = year + "-" + (month + 1) + "-" + day;
+        // Cek ulang tahun
+        const key = (month + 1) + "-" + day; // bulan-hari
         if (birthdays[key]) {
           birthdays[key].forEach(nama => {
             const b = document.createElement("div");
