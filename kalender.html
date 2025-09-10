@@ -1,131 +1,260 @@
-<script>
-  let currentYear = new Date().getFullYear();
-  let currentMonth = new Date().getMonth(); // mulai dari bulan sekarang
-  let birthdays = {};
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Kalender Ulang Tahun Pegawai</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      padding: 20px;
+    }
+    h1, h2 {
+      text-align: center;
+    }
+    .calendar {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 5px;
+      max-width: 800px;
+      margin: 20px auto;
+    }
+    .day, .header {
+      background: white;
+      border: 1px solid #ccc;
+      padding: 8px;
+      min-height: 60px;
+      position: relative;
+    }
+    .header {
+      background: #2196f3;
+      color: white;
+      text-align: center;
+      font-weight: bold;
+    }
+    .day span {
+      font-weight: bold;
+    }
+    .birthday {
+      background: #ffeb3b;
+      padding: 2px 4px;
+      margin-top: 5px;
+      display: inline-block;
+      border-radius: 3px;
+      font-size: 0.8em;
+      position: relative;
+      cursor: pointer;
+    }
+    /* Tooltip box */
+    .birthday::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: 130%;
+      left: 50%;
+      transform: translateX(-50%) translateY(10px);
+      background: rgba(0,0,0,0.85);
+      color: #fff;
+      padding: 5px 8px;
+      border-radius: 5px;
+      white-space: nowrap;
+      font-size: 0.75em;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease, transform 0.25s ease;
+      z-index: 10;
+    }
+    /* Segitiga kecil */
+    .birthday::before {
+      content: "";
+      position: absolute;
+      bottom: 120%;
+      left: 50%;
+      transform: translateX(-50%) translateY(10px);
+      border-width: 6px;
+      border-style: solid;
+      border-color: rgba(0,0,0,0.85) transparent transparent transparent;
+      opacity: 0;
+      transition: opacity 0.25s ease, transform 0.25s ease;
+      z-index: 9;
+    }
+    /* Saat hover */
+    .birthday:hover::after,
+    .birthday:hover::before {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+    .nav-buttons {
+      text-align: center;
+      margin: 20px 0;
+    }
+    .nav-buttons button {
+      background: #2196f3;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin: 0 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1em;
+    }
+    .nav-buttons button:hover {
+      background: #1976d2;
+    }
+    /* Weekend (Sabtu & Minggu) */
+    .weekend {
+      background: #ffe5e5;
+    }
+    /* Highlight hari ini */
+    .today {
+      background: #d4f8d4 !important;
+      border: 2px solid #4caf50;
+    }
+    .day.empty {
+      background: transparent;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>Kalender Ulang Tahun Pegawai</h1>
+  <div class="nav-buttons">
+    <button id="prevBtn">⟨ Previous</button>
+    <button id="todayBtn">Today</button>
+    <button id="nextBtn">Next ⟩</button>
+  </div>
+  <h2 id="month-title"></h2>
+  <div id="calendar-container" class="calendar"></div>
 
-  async function loadBirthdays() {
-    const response = await fetch("./ulangtahun.csv");
-    const text = await response.text();
-    const lines = text.trim().split("\n").slice(1); // buang header
-    const data = {};
+  <script>
+    let currentYear = new Date().getFullYear();
+    let currentMonth = new Date().getMonth();
+    let birthdays = {};
 
-    lines.forEach(line => {
-      const [nama, tanggal] = line.split(/,(.+)/); 
-      const parts = tanggal.trim().split("/").map(Number);
+    async function loadBirthdays() {
+      const response = await fetch("./ulangtahun.csv");
+      const text = await response.text();
+      const lines = text.trim().split("\n").slice(1); // buang header
+      const data = {};
 
-      const day = parts[0];
-      const month = parts[1];
-      const year = parts[2] || null; // tahun bisa opsional
+      lines.forEach(line => {
+        const [nama, tanggal] = line.split(/,(.+)/);
+        const parts = tanggal.trim().split("/").map(Number);
 
-      const key = month + "-" + day; // hanya simpan bulan-hari
-      if (!data[key]) data[key] = [];
-      data[key].push({ nama: nama.trim(), year });
+        const day = parts[0];
+        const month = parts[1];
+        const year = parts[2] || null;
+
+        const key = month + "-" + day; 
+        if (!data[key]) data[key] = [];
+        data[key].push({ nama: nama.trim(), year });
+      });
+
+      birthdays = data;
+      renderCalendar(currentYear, currentMonth);
+    }
+
+    function renderCalendar(year, month) {
+      const container = document.getElementById("calendar-container");
+      const title = document.getElementById("month-title");
+      container.innerHTML = "";
+
+      const monthNames = [
+        "Januari","Februari","Maret","April","Mei","Juni",
+        "Juli","Agustus","September","Oktober","November","Desember"
+      ];
+      const dayNames = ["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"];
+
+      title.textContent = monthNames[month] + " " + year;
+
+      // Header hari
+      for (let d = 0; d < 7; d++) {
+        const header = document.createElement("div");
+        header.className = "header";
+        header.textContent = dayNames[d];
+        container.appendChild(header);
+      }
+
+      const firstDay = new Date(year, month, 1).getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+      const today = new Date();
+
+      // Kosong sebelum tanggal 1
+      for (let i = 0; i < firstDay; i++) {
+        const empty = document.createElement("div");
+        empty.className = "day empty";
+        container.appendChild(empty);
+      }
+
+      // Isi hari
+      for (let day = 1; day <= daysInMonth; day++) {
+        const dateObj = new Date(year, month, day);
+        const weekday = dateObj.getDay();
+
+        const cell = document.createElement("div");
+        cell.className = "day";
+
+        if (weekday === 0 || weekday === 6) {
+          cell.classList.add("weekend");
+        }
+        if (
+          day === today.getDate() &&
+          month === today.getMonth() &&
+          year === today.getFullYear()
+        ) {
+          cell.classList.add("today");
+        }
+
+        const span = document.createElement("span");
+        span.textContent = day;
+        cell.appendChild(span);
+
+        const key = (month + 1) + "-" + day; 
+        if (birthdays[key]) {
+          birthdays[key].forEach(person => {
+            const b = document.createElement("div");
+            b.className = "birthday";
+            b.textContent = person.nama;
+
+            if (person.year) {
+              const usia = year - person.year;
+              b.setAttribute("data-tooltip", `${person.nama} berusia ${usia} tahun`);
+            } else {
+              b.setAttribute("data-tooltip", `${person.nama} (tahun lahir tidak diketahui)`);
+            }
+
+            cell.appendChild(b);
+          });
+        }
+        container.appendChild(cell);
+      }
+    }
+
+    // Navigasi
+    document.getElementById("prevBtn").addEventListener("click", () => {
+      currentMonth--;
+      if (currentMonth < 0) {
+        currentMonth = 11;
+        currentYear--;
+      }
+      renderCalendar(currentYear, currentMonth);
     });
 
-    birthdays = data;
-    renderCalendar(currentYear, currentMonth);
-  }
-
-  function renderCalendar(year, month) {
-    const container = document.getElementById("calendar-container");
-    const title = document.getElementById("month-title");
-    container.innerHTML = "";
-
-    const monthNames = [
-      "Januari","Februari","Maret","April","Mei","Juni",
-      "Juli","Agustus","September","Oktober","November","Desember"
-    ];
-    const dayNames = ["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"];
-
-    title.textContent = monthNames[month] + " " + year;
-
-    // Header hari
-    for (let d = 0; d < 7; d++) {
-      const header = document.createElement("div");
-      header.className = "header";
-      header.textContent = dayNames[d];
-      container.appendChild(header);
-    }
-
-    const firstDay = new Date(year, month, 1).getDay();
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
-
-    const today = new Date();
-
-    // Kosong sebelum tanggal 1
-    for (let i = 0; i < firstDay; i++) {
-      const empty = document.createElement("div");
-      empty.className = "day empty";
-      container.appendChild(empty);
-    }
-
-    // Isi hari
-    for (let day = 1; day <= daysInMonth; day++) {
-      const dateObj = new Date(year, month, day);
-      const weekday = dateObj.getDay(); // 0 = Minggu, 6 = Sabtu
-
-      const cell = document.createElement("div");
-      cell.className = "day";
-
-      // Tambah class weekend
-      if (weekday === 0 || weekday === 6) {
-        cell.classList.add("weekend");
+    document.getElementById("nextBtn").addEventListener("click", () => {
+      currentMonth++;
+      if (currentMonth > 11) {
+        currentMonth = 0;
+        currentYear++;
       }
+      renderCalendar(currentYear, currentMonth);
+    });
 
-      // Tambah highlight hari ini
-      if (
-        day === today.getDate() &&
-        month === today.getMonth() &&
-        year === today.getFullYear()
-      ) {
-        cell.classList.add("today");
-      }
+    document.getElementById("todayBtn").addEventListener("click", () => {
+      currentYear = new Date().getFullYear();
+      currentMonth = new Date().getMonth();
+      renderCalendar(currentYear, currentMonth);
+    });
 
-      const span = document.createElement("span");
-      span.textContent = day;
-      cell.appendChild(span);
-
-      // Cek ulang tahun
-      const key = (month + 1) + "-" + day; // bulan-hari
-      if (birthdays[key]) {
-        birthdays[key].forEach(person => {
-          const b = document.createElement("div");
-          b.className = "birthday";
-          b.textContent = person.nama;
-
-          // Tambah tooltip usia
-          if (person.year) {
-            const usia = year - person.year;
-            b.title = `${person.nama} berusia ${usia} tahun`;
-          } else {
-            b.title = `${person.nama} (tahun lahir tidak diketahui)`;
-          }
-
-          cell.appendChild(b);
-        });
-      }
-      container.appendChild(cell);
-    }
-  }
-
-  // Navigasi
-  document.getElementById("prevBtn").addEventListener("click", () => {
-    currentMonth--;
-    if (currentMonth < 0) {
-      currentMonth = 11;
-      currentYear--;
-    }
-    renderCalendar(currentYear, currentMonth);
-  });
-
-  document.getElementById("nextBtn").addEventListener("click", () => {
-    currentMonth++;
-    if (currentMonth > 11) {
-      currentMonth = 0;
-      currentYear++;
-    }
-    renderCalendar(currentYear, currentMonth);
-  });
-
-  loadBirthdays();
-</script>
+    loadBirthdays();
+  </script>
+</body>
+</html>
