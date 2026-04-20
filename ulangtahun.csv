@@ -1,91 +1,79 @@
-nama,tanggal
-Umam Lukmanul Hakim,01/01/1975
-Fitra Ridhawati,04/01/1985
-Magiana,20/01/1979
-Singgih Wicaksono,21/01/1992
-Fiqoh Galih Pangesti,31/01/1996
-Ahmad Ripai,07/02/1978
-Hari Eko Prabowo,10/02/1978
-Dhesti Khairunnisa,12/02/1999
-Dwiki Agung Pebrianda,13/02/1998
-Rohmatika Herliati,20/02/1992
-Mukhammad Soleh,22/02/1985
-Uding Hermara,23/02/1983
-Bayu Hadi Kusumo,27/02/1986
-Asep Heryanto,03/03/1973
-Muhammad Fahmi,03/03/1995
-Sardo Marthin,09/03/1985
-Bayuaji,13/03/1978
-Ala`Mul Bariah,17/03/1987
-Ariana Dwi Candra,01/04/1990
-Deni Achmad Nurulaen,09/04/1970
-Riza Sabila,22/04/1995
-Slamet Widiyanto,23/04/1977
-Mohammad Chaidir Rahman,28/04/1999
-Maryanto Hadi Susetijo,30/04/1975
-Indry Yana,05/05/1985
-Rangga Hamonangan Siregar,20/05/1981
-Setya Aji,21/05/1970
-Tati Mukti Maulastri,21/05/1971
-Moh. Fuad,27/05/1979
-Keyvin Tyas Satya Nugraha,02/06/1999
-Awanda Yuniasari,09/06/1994
-Nurul Dienul Qoyimah,09/06/1998
-Kasmaboti,20/06/1975
-Tri Yogo Susilo,04/07/1978
-Hesti Triana Putri,04/07/1992
-Yulia Hartika,06/07/1971
-Chairunnisa` Nasution,07/07/1995
-Dino Sulistomo,19/07/1979
-Mariska Asmaranita,21/07/1990
-Hayati,05/08/1967
-Arinda Ayu Pratiwi,05/08/1997
-Harun Rosyid,10/08/1969
-Wahyu Asy`Ri Asy`Ari,10/08/1987
-Marco Regusta,11/08/2000
-Khoiril,13/08/1973
-Henni Lestari,17/08/1993
-Minik Muryati,19/08/1969
-Krisna Adiati Sri Mulatsih,20/08/1992
-Agus Santoso,21/08/1984
-Sarniyana,22/08/1985
-Rizal Septian,08/09/1996
-Irwanto Wibowo,09/09/1984
-Sri Noor Wulandari,15/09/1999
-Fungky Cahya Ari Saputra,18/09/1995
-Surahman Setiawan,20/09/1986
-Mu`Alif,21/09/1971
-Widhi Ayu Pieradita,23/09/1998
-Adi Yusepri,29/09/1981
-Indra Pancasakti,01/10/1987
-Syamsudin,05/10/1967
-Saedah,05/10/1970
-Hermance Yosepf Setiarto Hari Murti,07/10/1988
-Fahmi Hendra Rudin,09/10/1978
-Indra Kusuma Nugraha,16/10/1983
-Oktavianus Lukas Hendra Mandagi,18/10/1985
-Rita Harjanti,20/10/1980
-Herlambang Redian Setyantoro,23/10/1996
-Evan Asfian,24/10/1986
-Satria Berlian,24/10/1995
-Anggita Fitri Oktavian,28/10/1998
-Fajar Nurhadi,18/11/1970
-Teuku Nofrizal Kurniawan,29/11/1995
-Herry Setiawan,20/10/1972
-Fatichah Rizkita Putri,08/11/1999
-Iman Firmansyah,23/10/1986
-Trisnajaya,05/07/1987
-Raja David,10/06/1984
-Widi Hadiansyah,27/08/1985
-Emir Hidayat,10/06/1992
-Fardin Nugraha,14/09/1993
-Subhan Arifin,06/01/1997
-Chandra Pratama Gupta,24/04/1997
-Larasati,01/12/1991
-Danang Pangaribowo,05/12/1982
-Angga Kurniawan,05/12/1985
-Aditya Setya Ramadhani,20/12/2000
-Sumardiyono,21/12/1970
-Riyati,22/12/1971
-Sarwono,28/12/1969
-Yudi Rahman,29/12/1983
+No.,nama,tanggal
+1,Herry Setyawan,20/10/1972
+2,Nadia Zairani,10/04/1975
+3,Kholiq Jamil Rosyid,01/02/1973
+4,Rahmat Hidayat,14/08/1974
+5,Cicilia Jesi Noviandini,15/10/1974
+6,Bayuaji,13/03/1978
+7,Hari Eko Prabowo,10/02/1978
+8,Fahmi Hendra Rudin,09/10/1978
+9,Khoiril,13/08/1973
+10,Hermance Yosepf Setiarto Hari Murti,07/10/1988
+11,Idi Ardian,06/08/1975
+12,Minik Muryati,19/08/1969
+13,Riyati,22/12/1971
+14,Adi Yusepri,29/09/1981
+15,Rasyalifia Arnant Amourdyamukti,21/05/1999
+16,Sinta Bella Nurdianti,30/04/1998
+17,Marco Regusta,11/08/2000
+18,Ala`Mul Bariah,17/03/1987
+19,Henni Lestari,17/08/1993
+20,Syahroyat Ramadhani,15/01/1999
+21,Nurul Dienul Qoyimah,09/06/1998
+22,Widhi Ayu Pieradita,23/09/1998
+23,Saedah,05/10/1970
+24,Aditya Setya Ramadhani,20/12/2000
+25,Sarwono,28/12/1969
+26,Keyvin Tyas Satya Nugraha,02/06/1999
+27,Fatichah Rizkita Putri,08/11/1999
+28,Rita Harjanti,20/10/1980
+29,Asep Heryanto,03/03/1973
+30,Ahmad Ripai,07/02/1978
+31,Slamet Widiyanto,23/04/1977
+32,Rangga Hamonangan Siregar,20/05/1981
+33,Wahyu Asy`Ri Asy`Ari,10/08/1987
+34,Fardin Nugraha,14/09/1993
+35,Trisnajaya,05/07/1987
+36,Indra Kusuma Nugraha,16/10/1983
+37,Mukhammad Soleh,22/02/1985
+38,Widi Hadiansyah,27/08/1985
+39,Irwanto Wibowo,09/09/1984
+40,Tri Yogo Susilo,04/07/1978
+41,Angga Kurniawan,05/12/1985
+42,Muhammad Rifky Dharmawan,09/02/1995
+43,Singgih Wicaksono,21/01/1992
+44,Iman Firmansyah,23/10/1986
+45,Surahman Setiawan,20/09/1986
+46,Oktavianus Lukas Hendra Mandagi,18/10/1985
+47,Chandra Pratama Gupta,24/04/1997
+48,Agus Santoso,21/08/1984
+49,Raja David,10/06/1984
+50,Larasati,01/12/1991
+51,Fiqoh Galih Pangesti,31/01/1996
+52,Mariska Asmaranita,21/07/1990
+53,Evan Asfian,24/10/1986
+54,Emir Hidayat,10/06/1992
+55,Subhan Arifin,06/01/1997
+56,Sarniyana,22/08/1985
+57,Herlambang Redian Setyantoro,23/10/1996
+58,Arinda Ayu Pratiwi,05/08/1997
+59,Dhesti Khairunnisa,12/02/1999
+60,Danang Pangaribowo,05/12/1982
+61,Tati Mukti Maulastri,21/05/1971
+62,Chairunnisa` Nasution,07/07/1995
+63,Fungky Cahya Ari Saputra,18/09/1995
+64,Satria Berlian,24/10/1995
+65,Riza Sabila,22/04/1995
+66,Deni Achmad Nurulaen,09/04/1970
+67,Maryanto Hadi Susetijo,30/04/1975
+68,Dino Sulistomo,19/07/1979
+69,Yudi Rahman,29/12/1983
+70,Edo Teguh Wahyudi,05/06/1989
+71,Krisna Adiati Sri Mulatsih,20/08/1992
+72,Rohmatika Herliati,20/02/1992
+73,Fitra Ridhawati,04/01/1985
+74,Sandy Nugroho Saputro,23/12/1989
+75,Awanda Yuniasari,09/06/1994
+76,Hesti Triana Putri,04/07/1992
+77,Dwiki Agung Pebrianda,13/02/1998
+78,Muhammad Fahmi,03/03/1995
